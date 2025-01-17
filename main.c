@@ -17,36 +17,41 @@
 
 // the initial balance is 0
 int mails = 0;
+pthread_mutex_t mutex;
 void *routine()
 {
-    int i  = 0;
-    while (i < 1000000)
+    for (int i = 0; i < 100000; i++)
     {
+        pthread_mutex_lock(&mutex);
         mails++;
-        i++;
+        pthread_mutex_unlock(&mutex);
     }
 }
 
 int main(int ac, char **av)
 { 
-    pthread_t   t1, t2;
-    if (pthread_create(&t1, NULL, &routine, NULL) != 0)
+    pthread_t th[8];
+    pthread_mutex_init(&mutex, NULL);
+    for (int i = 0; i < 8; i++)
     {
-        return 1;
+        if (pthread_create(&th[i], NULL, &routine, NULL) != 0)
+        {
+            perror("Failed to create thread");
+            return (1);
+        }
+        printf("Thread %d has started\n", i);
     }
-    if (pthread_create(&t2, NULL, &routine, NULL) != 0)
+    for (int i = 0; i < 8; i++)
     {
-        return 2;
+        if (pthread_join(th[i], NULL) != 0)
+        {
+            perror("Failed to join thread");
+            return (5);
+        }
+        printf("Thread %d has finished execution\n", i);
     }
-    if (pthread_join(t1, NULL) != 0)
-    {
-        return 3;
-    }
-    if (pthread_join(t2, NULL) != 0)
-    {
-        return 4;
-    }
+   
+    pthread_mutex_destroy(&mutex);
     printf("Number of mails: %d\n", mails);
     return (0);
-
 }
