@@ -1,28 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmacau <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/08 18:07:08 by fmacau            #+#    #+#             */
-/*   Updated: 2025/01/28 16:31:06 by fmacau           ###   ########.fr       */
+/*   Created: 2025/01/28 19:00:04 by fmacau            #+#    #+#             */
+/*   Updated: 2025/01/28 19:00:05 by fmacau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./includes/philo.h"
+#include "../includes/philo.h"
 
-int main(int ac, char **av)
+int ft_atoi(char *str)
 {
-    if (ac < 5 || ac > 6)
+    int res;
+    int sign;
+    int i;
+
+    res = 0;
+    sign = 1;
+    i = 0;
+    while (str[i] <= 32)
+        i++;
+    if (str[i] == '+' || str[i] == '-')
+        if (str[i++] == '-')
+            sign = -1;
+    while (str[i] && str[i] >= '0' && str[i] <= '9')
     {
-        printf("\x1b[31m Error[N01]: Wrong number of arguments\n");
-        return (-1);
+        res = res * 10 + str[i] - '0';
+        i++;
     }
-    if (ft_checker_input(av) == -42)
-    {
-        printf("\x1b[31mError[P01]: invalid parameters\n");
-        return (-1);
-    }
-    return (0);
+    return (res * sign);
 }

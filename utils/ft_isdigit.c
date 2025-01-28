@@ -1,28 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   ft_isdigit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmacau <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/08 18:07:08 by fmacau            #+#    #+#             */
-/*   Updated: 2025/01/28 16:31:06 by fmacau           ###   ########.fr       */
+/*   Created: 2025/01/28 19:12:31 by fmacau            #+#    #+#             */
+/*   Updated: 2025/01/28 19:12:32 by fmacau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./includes/philo.h"
+#include  "../includes/philo.h"
 
-int main(int ac, char **av)
+int ft_isdigit(int c)
 {
-    if (ac < 5 || ac > 6)
-    {
-        printf("\x1b[31m Error[N01]: Wrong number of arguments\n");
-        return (-1);
-    }
-    if (ft_checker_input(av) == -42)
-    {
-        printf("\x1b[31mError[P01]: invalid parameters\n");
-        return (-1);
-    }
+    if (c >= '0' && c <= '9')
+        return (1);
     return (0);
 }
