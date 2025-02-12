@@ -12,12 +12,19 @@
 
 
 NAME = philo
-CC = cc 
-FLAGS = -Wall -Wextra -Werror
+CC = gcc 
+FLAGS = -Wall -Wextra -Werror -fsanitize=address
 SRC = ./philo.c \
 	 ./ft_checker.c \
 	 ./utils/ft_atoi.c \
 	 ./utils/ft_isdigit.c \
+	 ./ft_parse_args.c \
+	 ./ft_init_data.c \
+	 ./utils/ft_current_time.c \
+	 ./log_message.c \
+	 ./actions.c \
+	 ./simulation.c \
+	 ./clean_all.c \
 
 OBJ = ${SRC:.c=.o}
 
@@ -26,7 +33,7 @@ OBJ = ${SRC:.c=.o}
 
 
 ${NAME} : $(OBJ)
-		$(CC) $(FLAGS) $(OBJ) -o $(NAME)
+		$(CC) $(FLAGS) $(OBJ) -o $(NAME) -lpthread
 
 all: $(NAME)
 

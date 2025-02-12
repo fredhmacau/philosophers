@@ -17,34 +17,49 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <sys/types.h>
+#include <sys/time.h>
+# define ERROR "\x1b[31m"
+# define EATING "\x1b[32m"
+# define SLEEPING "\x1b[35m"
+# define DIE "\x1b[38;5;1m"
 
 typedef struct s_philo
 {
-    int     id;
-    int     time_to_die;
-    int     time_to_eat;
-    int     time_to_sleep;
-    int     nbr_of_meals;
-    int     nbr_of_philo;
-    int     *forks;
-    int     *meals;
+    int id;
+    int eating;
+    long last_meal_time;
+    pthread_t thread;
+    struct s_data *data;
 }   t_philo;
 
 typedef struct s_data
 {
-    t_philo *philo;
-    int     nbr_of_philo;
-    int     nbr_of_meals;
-    int     time_to_die;
-    int     time_to_eat;
-    int     time_to_sleep;
-    pthread_t   *thread;
-    pthread_mutex_t *mutex;
+    int num_philosophers;
+    long time_to_die;
+    long time_to_eat;
+    long time_to_sleep;
+    long start_time;
+    int must_eat_count;
+    int stop_simulation;
+    int num_philo_who_ate;
     pthread_mutex_t *forks;
-    pthread_mutex_t *meals;
+    pthread_mutex_t print_logs;
+    pthread_mutex_t meal_sync;
+    t_philo *philosophers;
 }   t_data;
 
 int ft_isdigit(int c);
 int ft_atoi(char *str);
 int ft_checker_input(char **av);
+int ft_parse_args(t_data *data, int ac, char **av);
+int ft_init_data(t_data *data);
+long ft_current_time(void);
+void    log_message(t_philo *philo, char *action);
+void    put_down_forks(t_philo *philo);
+void    sleep_and_think(t_philo *philo);
+void    eat(t_philo *philo);
+void    take_forks(t_philo *philo);
+int    check_death(t_philo *philo);
+void    start_simulation(t_data *data);
+void cleanup(t_data *data);
 #endif

@@ -14,15 +14,30 @@
 
 int main(int ac, char **av)
 {
+    t_data  data;
+
     if (ac < 5 || ac > 6)
     {
-        printf("\x1b[31m Error[N01]: Wrong number of arguments\n");
+        printf("%sError[N01]: Wrong number of arguments\n", ERROR);
         return (-1);
     }
     if (ft_checker_input(av) == -42)
     {
-        printf("\x1b[31mError[P01]: invalid parameters\n");
+        printf("%sError[P01]: invalid parameters\n", ERROR);
         return (-1);
     }
+    if (ft_parse_args(&data, ac, av))
+    {
+        printf("%sError[P02]: during parsing\n", ERROR);
+        return (-1);
+    }
+    if (ft_init_data(&data))
+    {
+        printf("%sError[P03]: init philo\n", ERROR);
+        return (-1);
+    }
+    printf("Starting simulation with %d philosophers\n", data.num_philosophers);
+    start_simulation(&data);
+    cleanup(&data);
     return (0);
 }
