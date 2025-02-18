@@ -19,3 +19,10 @@ long ft_current_time(void)
     gettimeofday(&tv, NULL);
     return (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
 }
+
+void precise_usleep(long microseconds)
+{
+    long start_time = ft_current_time();
+    while (ft_current_time() - start_time < microseconds)
+        usleep(100);
+}

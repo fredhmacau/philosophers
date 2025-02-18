@@ -18,13 +18,23 @@ static void destroy_forks(t_data *data)
 {
     int i;
 
-    i = -1;
-    while (i++ < data->num_philosophers)
+    i = 0;
+    while (i < data->num_philosophers)
+    {
         pthread_mutex_destroy(&data->forks[i]);
+        i++;
+    }
 }
 
 void cleanup(t_data *data)
 {
+    int i;
+
+    i = -1;
+    while (++i < data->num_philosophers)
+    {
+        pthread_join(data->philosophers[i].thread, NULL);
+    }
     if (!data)
         return ;
     if (data->forks)

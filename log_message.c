@@ -15,7 +15,8 @@
 void    log_message(t_philo *philo, char *action)
 {
     long timestamp;
-
+    if (!philo || !action)
+        return ;
     timestamp = ft_current_time() - philo->data->start_time;
     pthread_mutex_lock(&philo->data->print_logs);
     printf("%ld %d %s\n", timestamp, philo->id, action);

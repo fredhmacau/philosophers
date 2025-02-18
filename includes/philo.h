@@ -42,9 +42,11 @@ typedef struct s_data
     int must_eat_count;
     int stop_simulation;
     int num_philo_who_ate;
+    pthread_t supervisor;
     pthread_mutex_t *forks;
     pthread_mutex_t print_logs;
     pthread_mutex_t meal_sync;
+    pthread_mutex_t stop_simulation_mutex;
     t_philo *philosophers;
 }   t_data;
 
@@ -62,4 +64,5 @@ void    take_forks(t_philo *philo);
 int    check_death(t_philo *philo);
 void    start_simulation(t_data *data);
 void cleanup(t_data *data);
+void precise_usleep(long microseconds);
 #endif
