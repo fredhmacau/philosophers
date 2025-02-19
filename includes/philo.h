@@ -47,6 +47,7 @@ typedef struct s_data
     pthread_mutex_t print_logs;
     pthread_mutex_t meal_sync;
     pthread_mutex_t stop_simulation_mutex;
+    pthread_mutex_t forks_lock;
     t_philo *philosophers;
 }   t_data;
 
@@ -65,4 +66,7 @@ int    check_death(t_philo *philo);
 void    start_simulation(t_data *data);
 void cleanup(t_data *data);
 void precise_usleep(long microseconds);
+void *supervisor(void *arg);
+// void acquire_permission(t_data *data);
+// void release_permission(t_data *data);
 #endif

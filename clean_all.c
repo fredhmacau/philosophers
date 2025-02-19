@@ -28,13 +28,6 @@ static void destroy_forks(t_data *data)
 
 void cleanup(t_data *data)
 {
-    int i;
-
-    i = -1;
-    while (++i < data->num_philosophers)
-    {
-        pthread_join(data->philosophers[i].thread, NULL);
-    }
     if (!data)
         return ;
     if (data->forks)
@@ -43,11 +36,10 @@ void cleanup(t_data *data)
         free(data->forks);
         data->forks = NULL;
     }
-    if (pthread_mutex_destroy(&data->print_logs) != 0)
-        return ;
-    if (pthread_mutex_destroy(&data->meal_sync) != 0)
-        return ;
-    
+    pthread_mutex_destroy(&data->print_logs);
+    pthread_mutex_destroy(&data->meal_sync);
+    pthread_mutex_destroy(&data->stop_simulation_mutex);
+    pthread_mutex_destroy(&data->forks_lock);
     if (data->philosophers)
     {
         free(data->philosophers);

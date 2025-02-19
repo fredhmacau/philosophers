@@ -13,7 +13,7 @@
 
 NAME = philo
 CC = gcc 
-FLAGS = -Wall -Wextra -Werror -fsanitize=address
+FLAGS = -Wall -Wextra -Werror -fsanitize=address,undefined
 SRC = ./philo.c \
 	 ./ft_checker.c \
 	 ./utils/ft_atoi.c \
@@ -25,6 +25,7 @@ SRC = ./philo.c \
 	 ./actions.c \
 	 ./simulation.c \
 	 ./clean_all.c \
+	 ./supervisor.c \
 
 OBJ = ${SRC:.c=.o}
 
