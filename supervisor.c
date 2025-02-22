@@ -16,37 +16,43 @@ void *supervisor(void *arg)
 {
     t_data *data = (t_data *)arg;
     int i;
-    long time_since_last_meal;
-    pthread_mutex_lock(&data->stop_simulation_mutex);
-        if (data->stop_simulation)
-        {
-            pthread_mutex_unlock(&data->stop_simulation_mutex);
-            return (NULL);
-        }
-    pthread_mutex_unlock(&data->stop_simulation_mutex);
-    while (1)
-    {
-        i = -1;
-        while (++i < data->num_philosophers)
-        {
-            pthread_mutex_lock(&data->meal_sync);
-            time_since_last_meal = ft_current_time() - data->philosophers[i].last_meal_time;
-            if (time_since_last_meal >= data->time_to_die)
-            {
-                pthread_mutex_lock(&data->print_logs);
-                printf("%ld %d died\n", ft_current_time() - data->start_time, data->philosophers[i].id);
-                pthread_mutex_unlock(&data->print_logs);
+    int all_ate_enough;
 
+    while (!data->stop_simulation) {
+        i = -1;
+        while (++i < data->num_philosophers) {
+            pthread_mutex_lock(&data->meal_sync);
+            long time_since_last_meal = ft_current_time() - data->philosophers[i].last_meal_time;
+            if (time_since_last_meal >= data->time_to_die) {
+                log_message(&data->philosophers[i], "died");
                 pthread_mutex_lock(&data->stop_simulation_mutex);
                 data->stop_simulation = 1;
                 pthread_mutex_unlock(&data->stop_simulation_mutex);
-
                 pthread_mutex_unlock(&data->meal_sync);
                 return (NULL);
             }
             pthread_mutex_unlock(&data->meal_sync);
         }
-        usleep(5000);
+
+        if (data->must_eat_count != -1) {
+            pthread_mutex_lock(&data->meal_sync);
+            all_ate_enough = 1;
+            for (i = 0; i < data->num_philosophers; i++) {
+                if (data->philosophers[i].eating < data->must_eat_count) {
+                    all_ate_enough = 0;
+                    break;
+                }
+            }
+            pthread_mutex_unlock(&data->meal_sync);
+
+            if (all_ate_enough) {
+                pthread_mutex_lock(&data->stop_simulation_mutex);
+                data->stop_simulation = 1;
+                pthread_mutex_unlock(&data->stop_simulation_mutex);
+                return (NULL);
+            }
+        }
+        usleep(100);
     }
     return (NULL);
 }

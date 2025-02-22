@@ -47,7 +47,6 @@ typedef struct s_data
     pthread_mutex_t print_logs;
     pthread_mutex_t meal_sync;
     pthread_mutex_t stop_simulation_mutex;
-    pthread_mutex_t forks_lock;
     t_philo *philosophers;
 }   t_data;
 
@@ -58,14 +57,12 @@ int ft_parse_args(t_data *data, int ac, char **av);
 int ft_init_data(t_data *data);
 long ft_current_time(void);
 void    log_message(t_philo *philo, char *action);
-void    put_down_forks(t_philo *philo);
+// void    put_down_forks(t_philo *philo);
 void    sleep_and_think(t_philo *philo);
 void    eat(t_philo *philo);
-void    take_forks(t_philo *philo);
-int    check_death(t_philo *philo);
 void    start_simulation(t_data *data);
 void cleanup(t_data *data);
-void precise_usleep(long microseconds);
+void precise_usleep(long usec, t_data *data);
 void *supervisor(void *arg);
 // void acquire_permission(t_data *data);
 // void release_permission(t_data *data);

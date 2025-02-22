@@ -20,9 +20,13 @@ long ft_current_time(void)
     return (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
 }
 
-void precise_usleep(long microseconds)
+void precise_usleep(long usec, t_data *data)
 {
+    (void) data;
     long start_time = ft_current_time();
-    while (ft_current_time() - start_time < microseconds)
-        usleep(100);
+    while (ft_current_time() - start_time < usec)
+    {
+        usleep(10);
+    }
+
 }

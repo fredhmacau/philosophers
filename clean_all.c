@@ -30,6 +30,9 @@ void cleanup(t_data *data)
 {
     if (!data)
         return ;
+    if (data->philosophers != NULL) {
+        free(data->philosophers);
+    }
     if (data->forks)
     {
         destroy_forks(data);
@@ -40,10 +43,6 @@ void cleanup(t_data *data)
     pthread_mutex_destroy(&data->meal_sync);
     pthread_mutex_destroy(&data->stop_simulation_mutex);
     pthread_mutex_destroy(&data->forks_lock);
-    if (data->philosophers)
-    {
-        free(data->philosophers);
-        data->philosophers = NULL;
-    }
     data->num_philosophers = 0;
+    free(data);
 }

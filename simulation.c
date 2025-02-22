@@ -20,7 +20,7 @@ void *one_philosopher_routine(void *arg)
 
     pthread_mutex_lock(&philo->data->forks[0]);
     log_message(philo, "take a fork");
-    precise_usleep(philo->data->time_to_die);
+    precise_usleep(philo->data->time_to_die, philo->data);
     log_message(philo, "died");
     pthread_mutex_unlock(&philo->data->forks[0]);
     return (NULL);
@@ -34,56 +34,14 @@ static void start_simulation_when_one(t_data *data)
                   &one_philosopher_routine, &data->philosophers[0]);
    pthread_join(data->philosophers[0].thread, NULL);
 }
-
-// void *phil_routine(void *arg)
-// {
-//     t_philo *philo;
-
-//     philo = (t_philo *)arg;
-
-//     while (1)
-//     {
-//         pthread_mutex_lock(&philo->data->stop_simulation_mutex);
-//         if (philo->data->stop_simulation)
-//         {
-//             pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
-//             break;
-//         }
-//         pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
-//         take_forks(philo);
-//         eat(philo);
-//         put_down_forks(philo);
-//         sleep_and_think(philo);
-//         pthread_mutex_lock(&philo->data->stop_simulation_mutex);
-//         if (philo->data->stop_simulation)
-//         {
-//             pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
-//             break;
-//         }
-//         pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
-//         if (philo->data->must_eat_count != -1 &&
-//             philo->eating >= philo->data->must_eat_count)
-//         {
-//             pthread_mutex_lock(&philo->data->meal_sync);
-//             philo->data->num_philo_who_ate++;
-//             if (philo->data->num_philo_who_ate == philo->data->num_philosophers)
-//             {
-//                 pthread_mutex_lock(&philo->data->stop_simulation_mutex);
-//                 philo->data->stop_simulation = 1;
-//                 pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
-//             }
-//             pthread_mutex_unlock(&philo->data->meal_sync);
-//         }
-//     }
-//     return (NULL);
-// }
 void *phil_routine(void *arg)
 {
     t_philo *philo = (t_philo *)arg;
 
+    if (philo->id % 2 == 0)
+        usleep(1000);
     while (1)
     {
-        // Verifique a condição de parada
         pthread_mutex_lock(&philo->data->stop_simulation_mutex);
         if (philo->data->stop_simulation)
         {
@@ -91,50 +49,15 @@ void *phil_routine(void *arg)
             break;
         }
         pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
-
-        // Pegue os garfos
-        take_forks(philo);
-
-        // Verifique novamente a condição de parada
-        pthread_mutex_lock(&philo->data->stop_simulation_mutex);
-        if (philo->data->stop_simulation)
-        {
-            pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
-            put_down_forks(philo); // Libere os garfos antes de sair
-            break;
-        }
-        pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
-
         eat(philo);
-        put_down_forks(philo);
-
-        sleep_and_think(philo);
-
-        // Verifique novamente a condição de parada
         pthread_mutex_lock(&philo->data->stop_simulation_mutex);
-        if (philo->data->stop_simulation)
-        {
+        if (philo->data->stop_simulation) {
             pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
             break;
         }
         pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
-
-        // Verifique se o filósofo atingiu o limite de refeições
-        if (philo->data->must_eat_count != -1 &&
-            philo->eating >= philo->data->must_eat_count)
-        {
-            pthread_mutex_lock(&philo->data->meal_sync);
-            philo->data->num_philo_who_ate++;
-            if (philo->data->num_philo_who_ate == philo->data->num_philosophers)
-            {
-                pthread_mutex_lock(&philo->data->stop_simulation_mutex);
-                philo->data->stop_simulation = 1;
-                pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
-            }
-            pthread_mutex_unlock(&philo->data->meal_sync);
-        }
+        sleep_and_think(philo);
     }
-
     return (NULL);
 }
 
@@ -148,8 +71,10 @@ static void start_simulate_bigger_one(t_data *data)
     i = -1;
     pthread_create(&hypervisor, NULL, &supervisor, data);
     while (++i < data->num_philosophers)
+    {
         pthread_create(&data->philosophers[i].thread, NULL,
-                       &phil_routine, &data->philosophers[i]);
+            &phil_routine, &data->philosophers[i]);
+    }
     
     i = -1;
     pthread_join(hypervisor, NULL);

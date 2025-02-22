@@ -13,7 +13,7 @@
 
 NAME = philo
 CC = gcc 
-FLAGS = -Wall -Wextra -Werror -fsanitize=address,undefined
+FLAGS = -pthread -Wall -Wextra -Werror 
 SRC = ./philo.c \
 	 ./ft_checker.c \
 	 ./utils/ft_atoi.c \
@@ -34,7 +34,7 @@ OBJ = ${SRC:.c=.o}
 
 
 ${NAME} : $(OBJ)
-		$(CC) $(FLAGS) $(OBJ) -o $(NAME) -lpthread
+		$(CC) $(FLAGS) $(OBJ) -o $(NAME)
 
 all: $(NAME)
 
@@ -44,4 +44,4 @@ clean:
 fclean:
 	@rm -f $(NAME)
 
-re: fclean all
+re: clean all

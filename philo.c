@@ -29,20 +29,22 @@ int main(int ac, char **av)
     if (ft_checker_input(av) == -42)
     {
         printf("%sError[P01]: invalid parameters\n", ERROR);
+        free(data);
         return (-1);
     }
     if (ft_parse_args(data, ac, av))
     {
         printf("%sError[P02]: during parsing\n", ERROR);
+        free(data);
         return (-1);
     }
     if (ft_init_data(data))
     {
         printf("%sError[P03]: init philo\n", ERROR);
+        free(data);
         return (-1);
     }
     start_simulation(data);
     cleanup(data);
-    free(data);
     return (0);
 }
