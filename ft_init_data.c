@@ -27,7 +27,6 @@ int ft_init_data(t_data *data)
     pthread_mutex_init(&data->print_logs, NULL);
     pthread_mutex_init(&data->stop_simulation_mutex, NULL);
     pthread_mutex_init(&data->meal_sync, NULL);
-    pthread_mutex_init(&data->forks_lock, NULL);
     i = -1;
     data->start_time = ft_current_time();
     while (++i < data->num_philosophers)

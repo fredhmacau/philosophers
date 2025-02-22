@@ -42,7 +42,6 @@ void cleanup(t_data *data)
     pthread_mutex_destroy(&data->print_logs);
     pthread_mutex_destroy(&data->meal_sync);
     pthread_mutex_destroy(&data->stop_simulation_mutex);
-    pthread_mutex_destroy(&data->forks_lock);
     data->num_philosophers = 0;
     free(data);
 }

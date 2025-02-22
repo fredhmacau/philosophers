@@ -22,11 +22,18 @@ long ft_current_time(void)
 
 void precise_usleep(long usec, t_data *data)
 {
-    (void) data;
-    long start_time = ft_current_time();
-    while (ft_current_time() - start_time < usec)
+
+    long start_time;
+    start_time = ft_current_time() + usec;
+    while (ft_current_time() < start_time)
     {
-        usleep(10);
+        pthread_mutex_lock(&data->stop_simulation_mutex);
+        if (data->stop_simulation) {
+            pthread_mutex_unlock(&data->stop_simulation_mutex);
+            break;
+        }
+        pthread_mutex_unlock(&data->stop_simulation_mutex);
+        usleep(100);
     }
 
 }
