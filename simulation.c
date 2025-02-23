@@ -28,6 +28,7 @@ void *one_philosopher_routine(void *arg)
 
 static void start_simulation_when_one(t_data *data)
 {
+
    if (!data->philosophers)
         return ;
    pthread_create(&data->philosophers[0].thread, NULL,
@@ -40,20 +41,9 @@ void *phil_routine(void *arg)
 
     while (1)
     {
-        pthread_mutex_lock(&philo->data->stop_simulation_mutex);
         if (philo->data->stop_simulation)
-        {
-            pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
             break;
-        }
-        pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
         eat(philo);
-        pthread_mutex_lock(&philo->data->stop_simulation_mutex);
-        if (philo->data->stop_simulation) {
-            pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
-            break;
-        }
-        pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
         sleep_and_think(philo);
     }
     return (NULL);
@@ -82,7 +72,6 @@ static void start_simulate_bigger_one(t_data *data)
 
 void start_simulation(t_data *data)
 {
-    data->start_time = ft_current_time();
     if (data->num_philosophers < 2)
         start_simulation_when_one(data);
     else

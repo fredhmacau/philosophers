@@ -56,19 +56,13 @@ void eat(t_philo *philo) {
 
 void    sleep_and_think(t_philo *philo)
 {
-    pthread_mutex_lock(&philo->data->stop_simulation_mutex);
     if (philo->data->stop_simulation) {
-        pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
         return;
     }
-    pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
     log_message(philo, "is sleeping");
     precise_usleep(philo->data->time_to_sleep, philo->data);
-    pthread_mutex_lock(&philo->data->stop_simulation_mutex);
     if (philo->data->stop_simulation) {
-        pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
         return;
     }
-    pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
     log_message(philo, "is thinking");
 }
