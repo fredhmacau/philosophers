@@ -13,7 +13,7 @@
 
 NAME = philo
 CC = gcc 
-FLAGS = -pthread -Wall -Wextra -Werror 
+FLAGS = -Wall -Wextra -Werror
 SRC = ./philo.c \
 	 ./ft_checker.c \
 	 ./utils/ft_atoi.c \

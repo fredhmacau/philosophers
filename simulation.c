@@ -38,10 +38,14 @@ static void start_simulation_when_one(t_data *data)
 void *phil_routine(void *arg)
 {
     t_philo *philo = (t_philo *)arg;
+    int stop = 0;
 
     while (1)
     {
-        if (philo->data->stop_simulation)
+        pthread_mutex_lock(&philo->data->stop_simulation_mutex);
+        stop = philo->data->stop_simulation;
+        pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
+        if (stop)
             break;
         eat(philo);
         sleep_and_think(philo);

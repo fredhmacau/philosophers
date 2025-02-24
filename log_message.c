@@ -15,12 +15,14 @@
 void    log_message(t_philo *philo, char *action)
 {
     long timestamp;
+    int stop;
     if (!philo || !action)
         return ;
-    if (philo->data->stop_simulation) {
-        pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
+    pthread_mutex_lock(&philo->data->stop_simulation_mutex);
+    stop = philo->data->stop_simulation;
+    pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
+    if (stop)
         return;
-    }
     pthread_mutex_lock(&philo->data->print_logs);
     timestamp = ft_current_time() - philo->data->start_time;
     printf("%ldms %d %s\n", timestamp, philo->id + 1, action);

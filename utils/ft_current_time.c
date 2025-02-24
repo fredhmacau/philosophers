@@ -27,13 +27,14 @@ void precise_usleep(long usec, t_data *data)
     start_time = ft_current_time() + usec;
     while (ft_current_time() < start_time)
     {
+        usleep(100);
         pthread_mutex_lock(&data->stop_simulation_mutex);
         if (data->stop_simulation) {
             pthread_mutex_unlock(&data->stop_simulation_mutex);
             break;
         }
         pthread_mutex_unlock(&data->stop_simulation_mutex);
-        usleep(100);
+        
     }
 
 }
