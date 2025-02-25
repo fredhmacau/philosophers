@@ -47,12 +47,9 @@ void eat(t_philo *philo) {
         return;
     }
     log_message(philo, "is eating");
-    pthread_mutex_lock(&philo->meal_mutex);
-    philo->last_meal_time = ft_current_time();
-    philo->eating++;
-    pthread_mutex_unlock(&philo->meal_mutex);
     precise_usleep(philo->data->time_to_eat, philo->data);
     pthread_mutex_lock(&philo->meal_mutex);
+    philo->eating++;
     philo->last_meal_time = ft_current_time();
     pthread_mutex_unlock(&philo->meal_mutex);
     unlock_forks(philo, left_fork, right_fork);
