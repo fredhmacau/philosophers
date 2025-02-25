@@ -38,17 +38,19 @@ static void start_simulation_when_one(t_data *data)
 void *phil_routine(void *arg)
 {
     t_philo *philo = (t_philo *)arg;
-    int stop = 0;
 
-    while (1)
+    while (!get_simulation_status(philo->data))
     {
-        pthread_mutex_lock(&philo->data->stop_simulation_mutex);
-        stop = philo->data->stop_simulation;
-        pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
-        if (stop)
+        if (get_simulation_status(philo->data))
             break;
-        eat(philo);
-        sleep_and_think(philo);
+        else{
+            eat(philo);
+            if (get_simulation_status(philo->data))
+                break ;
+            sleep_and_think(philo);
+            if (get_simulation_status(philo->data))
+                break ;
+        }
     }
     return (NULL);
 }
@@ -61,13 +63,14 @@ static void start_simulate_bigger_one(t_data *data)
     if (!data || !data->philosophers)
         return;
     i = -1;
-    pthread_create(&hypervisor, NULL, &supervisor, data);
     while (++i < data->num_philosophers)
     {
         pthread_create(&data->philosophers[i].thread, NULL,
-            &phil_routine, &data->philosophers[i]);
+                       &phil_routine, &data->philosophers[i]);
+        usleep(100);
     }
-    
+    pthread_create(&hypervisor, NULL, &supervisor, data);
+
     i = -1;
     pthread_join(hypervisor, NULL);
     while (++i < data->num_philosophers)

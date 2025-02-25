@@ -26,11 +26,23 @@ static void destroy_forks(t_data *data)
     }
 }
 
+static void destroy_meal_mutexes(t_data *data)
+{
+    int i;
+
+    i = 0;
+    while (i < data->num_philosophers)
+    {
+        pthread_mutex_destroy(&data->philosophers[i].meal_mutex);
+        i++;
+    }
+}
 void cleanup(t_data *data)
 {
     if (!data)
         return ;
     if (data->philosophers != NULL) {
+        destroy_meal_mutexes(data);
         free(data->philosophers);
     }
     if (data->forks)
@@ -40,8 +52,8 @@ void cleanup(t_data *data)
         data->forks = NULL;
     }
     pthread_mutex_destroy(&data->print_logs);
-    pthread_mutex_destroy(&data->meal_sync);
     pthread_mutex_destroy(&data->stop_simulation_mutex);
+    
     data->num_philosophers = 0;
     free(data);
 }

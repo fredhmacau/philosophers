@@ -12,36 +12,53 @@
 
 #include "./includes/philo.h"
 
+#include "./includes/philo.h"
 
+void print_error(const char *code, const char *msg)
+{
+    printf("%sError[%s]: %s\n", ERROR, code, msg);
+}
+
+void free_data(t_data *data)
+{
+    free(data);
+}
+
+int initialize_data(t_data *data, int ac, char **av)
+{
+    if (ft_checker_input(av) == -42)
+    {
+        print_error("P01", "invalid parameters");
+        return (-1);
+    }
+    if (ft_parse_args(data, ac, av))
+    {
+        print_error("P02", "during parsing");
+        return (-1);
+    }
+    if (ft_init_data(data))
+    {
+        print_error("P03", "init philo");
+        return (-1);
+    }
+    return (0);
+}
 
 int main(int ac, char **av)
 {
-    t_data  *data;
+    t_data *data;
 
     if (ac < 5 || ac > 6)
     {
-        printf("%sError[N01]: Wrong number of arguments\n", ERROR);
+        print_error("N01", "Wrong number of arguments");
         return (-1);
     }
     data = malloc(sizeof(t_data));
     if (!data)
         return (-1);
-    if (ft_checker_input(av) == -42)
+    if (initialize_data(data, ac, av) == -1)
     {
-        printf("%sError[P01]: invalid parameters\n", ERROR);
-        free(data);
-        return (-1);
-    }
-    if (ft_parse_args(data, ac, av))
-    {
-        printf("%sError[P02]: during parsing\n", ERROR);
-        free(data);
-        return (-1);
-    }
-    if (ft_init_data(data))
-    {
-        printf("%sError[P03]: init philo\n", ERROR);
-        free(data);
+        free_data(data);
         return (-1);
     }
     start_simulation(data);

@@ -1,35 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_current_time.c                                  :+:      :+:    :+:   */
+/*   ft_stop.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fmacau <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/12 08:53:02 by fmacau            #+#    #+#             */
-/*   Updated: 2025/02/12 08:53:04 by fmacau           ###   ########.fr       */
+/*   Created: 2025/02/25 01:10:44 by fmacau            #+#    #+#             */
+/*   Updated: 2025/02/25 01:10:50 by fmacau           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #include "../includes/philo.h"
 
-time_t ft_current_time(void)
+int get_simulation_status(t_data *data)
 {
-    struct timeval tv;
+    int status;
 
-    gettimeofday(&tv, NULL);
-    return (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
+    pthread_mutex_lock(&data->stop_simulation_mutex);
+    status = data->stop_simulation;
+    pthread_mutex_unlock(&data->stop_simulation_mutex);
+    return status;
 }
 
-void precise_usleep(long usec, t_data *data)
+void set_simulation_status(t_data *data, int status) 
 {
-
-    long start_time;
-    start_time = ft_current_time() + usec;
-    while (ft_current_time() < start_time)
-    {
-        usleep(100);
-        if (get_simulation_status(data))
-            break;
-    }
-
+    pthread_mutex_lock(&data->stop_simulation_mutex);
+    data->stop_simulation = status;
+    pthread_mutex_unlock(&data->stop_simulation_mutex);
 }

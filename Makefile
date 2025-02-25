@@ -18,6 +18,7 @@ SRC = ./philo.c \
 	 ./ft_checker.c \
 	 ./utils/ft_atoi.c \
 	 ./utils/ft_isdigit.c \
+	 ./utils/ft_stop.c \
 	 ./ft_parse_args.c \
 	 ./ft_init_data.c \
 	 ./utils/ft_current_time.c \

@@ -13,6 +13,7 @@
 #include "./includes/philo.h"
 
 void lock_forks(t_philo *philo, int left_fork, int right_fork) {
+
     if (philo->id % 2 == 0) {
         pthread_mutex_lock(&philo->data->forks[left_fork]);
         log_message(philo, "has taken a fork");
@@ -35,47 +36,35 @@ void unlock_forks(t_philo *philo, int left_fork, int right_fork) {
 void eat(t_philo *philo) {
     int left_fork;
     int right_fork;
-    int stop;
     
     left_fork = philo->id;
     right_fork = (philo->id + 1) % philo->data->num_philosophers;
-    pthread_mutex_lock(&philo->data->stop_simulation_mutex);
-    stop = philo->data->stop_simulation;
-    pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
-    if (stop)
+    if (get_simulation_status(philo->data))
         return;
     lock_forks(philo, left_fork, right_fork);
-    pthread_mutex_lock(&philo->data->stop_simulation_mutex);
-    stop = philo->data->stop_simulation;
-    pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
-    if (stop) {
+    if (get_simulation_status(philo->data)) {
         unlock_forks(philo, left_fork, right_fork);
         return;
     }
-    pthread_mutex_lock(&philo->data->meal_sync);
+    log_message(philo, "is eating");
+    pthread_mutex_lock(&philo->meal_mutex);
     philo->last_meal_time = ft_current_time();
     philo->eating++;
-    pthread_mutex_unlock(&philo->data->meal_sync);
-    log_message(philo, "is eating");
+    pthread_mutex_unlock(&philo->meal_mutex);
     precise_usleep(philo->data->time_to_eat, philo->data);
+    pthread_mutex_lock(&philo->meal_mutex);
+    philo->last_meal_time = ft_current_time();
+    pthread_mutex_unlock(&philo->meal_mutex);
     unlock_forks(philo, left_fork, right_fork);
 }
 
 void    sleep_and_think(t_philo *philo)
 {
-    int stop;
-
-    pthread_mutex_lock(&philo->data->stop_simulation_mutex);
-    stop = philo->data->stop_simulation;
-    pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
-    if (stop)
+    if (get_simulation_status(philo->data))
         return;
     log_message(philo, "is sleeping");
     precise_usleep(philo->data->time_to_sleep, philo->data);
-    pthread_mutex_lock(&philo->data->stop_simulation_mutex);
-    stop = philo->data->stop_simulation;
-    pthread_mutex_unlock(&philo->data->stop_simulation_mutex);
-    if (stop)
+    if (get_simulation_status(philo->data))
         return;
     log_message(philo, "is thinking");
 }

@@ -29,6 +29,7 @@ typedef struct s_philo
     int eating;
     long last_meal_time;
     pthread_t thread;
+    pthread_mutex_t meal_mutex;
     struct s_data *data;
 }   t_philo;
 
@@ -45,7 +46,6 @@ typedef struct s_data
     pthread_t supervisor;
     pthread_mutex_t *forks;
     pthread_mutex_t print_logs;
-    pthread_mutex_t meal_sync;
     pthread_mutex_t stop_simulation_mutex;
     t_philo *philosophers;
 }   t_data;
@@ -55,8 +55,11 @@ int ft_atoi(char *str);
 int ft_checker_input(char **av);
 int ft_parse_args(t_data *data, int ac, char **av);
 int ft_init_data(t_data *data);
-long ft_current_time(void);
+int get_simulation_status(t_data *data);
+void set_simulation_status(t_data *data, int status);
+    time_t ft_current_time(void);
 void    log_message(t_philo *philo, char *action);
+
 // void    put_down_forks(t_philo *philo);
 void    sleep_and_think(t_philo *philo);
 void    eat(t_philo *philo);
