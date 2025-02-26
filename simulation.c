@@ -39,6 +39,8 @@ void *phil_routine(void *arg)
 {
     t_philo *philo = (t_philo *)arg;
 
+    if (philo->id % 2)
+        usleep(philo->data->time_to_eat / 10);
     while (!get_simulation_status(philo->data))
     {
         if (get_simulation_status(philo->data))
@@ -70,7 +72,6 @@ static void start_simulate_bigger_one(t_data *data)
         usleep(100);
     }
     pthread_create(&hypervisor, NULL, &supervisor, data);
-
     i = -1;
     pthread_join(hypervisor, NULL);
     while (++i < data->num_philosophers)

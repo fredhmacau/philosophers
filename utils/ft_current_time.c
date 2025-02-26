@@ -27,7 +27,7 @@ void precise_usleep(long usec, t_data *data)
     start_time = ft_current_time() + usec;
     while (ft_current_time() < start_time)
     {
-        usleep(100);
+        usleep(usec / 10);
         if (get_simulation_status(data))
             break;
     }
