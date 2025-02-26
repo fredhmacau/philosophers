@@ -14,7 +14,7 @@
 
 void lock_forks(t_philo *philo, int left_fork, int right_fork) {
 
-    if (philo->id % 2 == 0) {
+    if (left_fork < right_fork) {
         pthread_mutex_lock(&philo->data->forks[left_fork]);
         log_message(philo, "has taken a fork");
         pthread_mutex_lock(&philo->data->forks[right_fork]);

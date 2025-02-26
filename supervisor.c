@@ -20,7 +20,7 @@ int check_philosopher(t_data *data, int i) {
     died = 0;
     current_time = ft_current_time();
     last_meal = data->philosophers[i].last_meal_time;
-    died = (current_time - last_meal) >= (data->time_to_die + 3);
+    died = (current_time - last_meal) > (data->time_to_die + 3);
     if (died && !get_simulation_status(data))
     {
         set_simulation_status(data, 1);
@@ -89,7 +89,7 @@ void *supervisor(void *arg)
         if (!death_detected && (data->must_eat_count != -1 && check_all_ate_enough(data)))
             set_simulation_status(data, 1);
         unlock_all_meal_mutexes(data);
-        usleep(1000);
+        usleep(500);
     }
     return (NULL);
 }
