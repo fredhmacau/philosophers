@@ -6,7 +6,7 @@
 #    By: fmacau <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/28 16:50:35 by fmacau            #+#    #+#              #
-#    Updated: 2025/02/27 20:05:47 by fmacau           ###   ########.fr        #
+#    Updated: 2025/02/28 08:44:55 by fmacau           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,19 +30,21 @@ SRC = ./philo.c \
 
 OBJ = ${SRC:.c=.o}
 
-%.o : %.c
+
+${NAME}: $(OBJ)
+	@$(CC) $(FLAGS) $(OBJ) -Iincludes -o $(NAME)
+	@echo "compiled"
+%.o:%.c
 	$(CC) $(FLAGS) -c $< -o $@
-
-
-${NAME} : $(OBJ)
-		$(CC) $(FLAGS) $(OBJ) -o $(NAME)
 
 all: $(NAME)
 
 clean: 
-	@rm -f $(OBJ)
+	@rm -rf $(OBJ)
+	@echo "clean objects files..."
 
 fclean:
-	@rm -f $(NAME)
+	@rm -rf $(NAME)
+	@echo "remove file ./philo"
 
-re: clean all
+re: fclean all
