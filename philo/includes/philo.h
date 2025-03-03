@@ -48,11 +48,11 @@ typedef struct s_data
 	int				num_philosophers;
 	int				must_eat_count;
 	int				stop_simulation;
-	int				num_philo_who_ate;
 	t_philo			*philosophers;
 }	t_data;
 
 time_t	ft_current_time(void);
+long	ft_atoi(char *str);
 void	set_simulation_status(t_data *data, int status);
 void	log_message(t_philo *philo, char *action, char *status);
 void	sleep_and_think(t_philo *philo);
@@ -62,7 +62,6 @@ void	cleanup(t_data *data);
 void	precise_usleep(long usec, t_data *data);
 void	*supervisor(void *arg);
 int		ft_isdigit(int c);
-int		ft_atoi(char *str);
 int		ft_checker_input(char **av);
 int		ft_parse_args(t_data *data, int ac, char **av);
 int		ft_init_data(t_data *data);

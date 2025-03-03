@@ -36,6 +36,5 @@ int	ft_init_data(t_data *data)
 		pthread_mutex_init(&data->philosophers[i].meal_mutex, NULL);
 	}
 	data->stop_simulation = 0;
-	data->num_philo_who_ate = 0;
 	return (0);
 }

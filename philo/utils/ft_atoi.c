@@ -12,11 +12,11 @@
 
 #include "../includes/philo.h"
 
-int	ft_atoi(char *str)
+long	ft_atoi(char *str)
 {
-	int	res;
-	int	sign;
-	int	i;
+	long	res;
+	int		sign;
+	int		i;
 
 	res = 0;
 	sign = 1;

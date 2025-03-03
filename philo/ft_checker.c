@@ -30,7 +30,9 @@ int	ft_checker_args(char *av)
 
 int	ft_other_analyzes(char *av)
 {
-	if (ft_atoi(av) <= 0)
+	if (ft_checker_args(av) == -42)
+		return (-42);
+	else if (ft_atoi(av) <= 0 || ft_atoi(av) > 2147483647)
 		return (-42);
 	return (1);
 }
@@ -39,13 +41,6 @@ int	ft_checker_input(char **av)
 {
 	int	i;
 
-	i = 1;
-	while (av[i])
-	{
-		if (ft_checker_args(av[i]) == -42)
-			return (-42);
-		i++;
-	}
 	if (!(ft_atoi(av[1]) >= 1 && ft_atoi(av[1]) <= 200))
 		return (-42);
 	i = 2;

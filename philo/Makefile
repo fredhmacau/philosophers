@@ -6,7 +6,7 @@
 #    By: fmacau <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/01/28 16:50:35 by fmacau            #+#    #+#              #
-#    Updated: 2025/02/28 08:44:55 by fmacau           ###   ########.fr        #
+#    Updated: 2025/03/03 17:16:30 by fmacau           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,7 @@ clean:
 	@rm -rf $(OBJ)
 	@echo "clean objects files..."
 
-fclean:
+fclean: clean
 	@rm -rf $(NAME)
 	@echo "remove file ./philo"
 
