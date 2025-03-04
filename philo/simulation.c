@@ -40,7 +40,7 @@ void	*phil_routine(void *arg)
 
 	philo = (t_philo *)arg;
 	if (philo->id % 2)
-		usleep(philo->data->time_to_eat / 10);
+		usleep(1000);
 	while (!get_simulation_status(philo->data))
 	{
 		if (get_simulation_status(philo->data))
