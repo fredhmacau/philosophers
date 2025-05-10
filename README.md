@@ -1,7 +1,7 @@
-#O jantar dos filosofos
+# O jantar dos filosofos
 Este é uma implementação em C do famoso problema do Jantar dos filosofos.
 
-##Descrição
+## Descrição
 Um ou mais filósofos sentam-se em uma mesa redonda.
 Há uma grande tigela de espaguete no meio da mesa.
 Os filósofos alternam entre comer, pensar ou dormir.
@@ -16,5 +16,5 @@ Os filósofos não sabem se outro filósofo está prestes a morrer.
 Não é preciso dizer que os filósofos devem evitar morrer!
 
 ----
-##Conceitos Aplicados
+## Conceitos Aplicados
 Fundamentos de threading em um processo, criação de threads e mutexes.
